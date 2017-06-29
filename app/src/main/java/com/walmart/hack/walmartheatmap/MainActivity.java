@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recylerview);
         linearView = (LinearLayout) findViewById(R.id.linear);
 
-
+        connectWebSocket();
 
         add = (Button) findViewById(R.id.add);
         remove = (Button) findViewById(R.id.remove);
