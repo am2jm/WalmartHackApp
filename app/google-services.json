@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1072031081509",
+    "firebase_url": "https://testpush-29565.firebaseio.com",
+    "project_id": "testpush-29565",
+    "storage_bucket": "testpush-29565.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072031081509:android:f30a9891cc2b9a1d",
+        "android_client_info": {
+          "package_name": "com.walmart.hack.walmartheatmap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1072031081509-58d419777jg2hs9mtls9brt75g39v1sh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPTxiOyzRtYsO90TFUxEKOYMeIxuM4ZEA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
