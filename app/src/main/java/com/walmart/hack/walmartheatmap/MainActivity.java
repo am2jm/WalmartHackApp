@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -25,12 +26,20 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
 
     private String MY_URL = "http://discovermagazine.com/2012/extreme-earth/01-big-one-earthquake-could-devastate-pacific-northwest";
+    private String WEBSOCKET_HOST = "ws://10.165.150.129:8081";
 
     private WebView webview;
     private ScrollView scrollview;
@@ -39,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Notification> dataset;
     DatabaseHelper mDbHelper;
     SQLiteDatabase db;
+    WebSocketClient mWebSocketClient;
 
     private TextView numbers;
     private EditText input;
@@ -270,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
 
         mDbHelper.close();
+        Collections.reverse(dataset);
 
 
         ListAdapter adapter = new ListAdapter(this, dataset);
@@ -277,4 +288,54 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
+
+
+
+    //***********
+    // * Web Socket Stufff
+
+
+    private void connectWebSocket() {
+        URI uri;
+        try {
+            uri = new URI(WEBSOCKET_HOST);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        mWebSocketClient = new WebSocketClient(uri) {
+            @Override
+            public void onOpen(ServerHandshake serverHandshake) {
+                Log.i("Websocket", "Opened");
+//                mWebSocketClient.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL);
+            }
+
+            @Override
+            public void onMessage(String s) {
+                final String message = s;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        TextView textView = (TextView)findViewById(R.id.messages);
+//                        textView.sendtText(textView.getText() + "\n" + message);
+                        // adding the newest message to the list of messages
+                        dataset.add(new Notification("Newest Notification:", message));
+                    }
+                });
+            }
+
+            @Override
+            public void onClose(int i, String s, boolean b) {
+                Log.i("Websocket", "Closed " + s);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.i("Websocket", "Error " + e.getMessage());
+            }
+        };
+        mWebSocketClient.connect();
+    }
+
 }
